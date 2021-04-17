@@ -1,2 +1,2 @@
 # Web_scraping
-Web scraping E-comers pages. 
+Web scraping E-commerce pages. 
