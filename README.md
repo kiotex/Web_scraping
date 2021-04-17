@@ -7,5 +7,4 @@ Web scraping E-commerce pages.
 conda install -c conda-forge beautifulsoup4
 conda install -c conda-forge selenium
 conda install -c conda-forge chromedriver-binary
-pip install line-bot-sdk
 ```
