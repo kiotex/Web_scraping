@@ -11,15 +11,16 @@ class Yodobashi(Request_Interface):
         """在庫確認用メソッド
 
         Returns:
-            bool:   在庫の有無（在庫あり:True, 在庫なし:False, ERROR: -1）
+            bool:   在庫の有無（在庫あり:True, 在庫なし:False）
             float:  金額
             string: 商品名
         """
         soup = self.get_soup()
-        cost = self.strip_character(soup.select_one("#js_scl_unitPrice").text)
-        name = self.remove_html_tags(soup.select_one("#products_maintitle").text)
-        if soup.select_one("#salesInfoTxt").text == "在庫あり":
 
-            return True, cost, name
+        if soup.select_one("#salesInfoTxt").text == "在庫あり":
+            self.stock = True
         else:
-            return False, cost, name
+            self.stock = False
+
+        self.cost = self.strip_character(soup.select_one("#js_scl_unitPrice").text)
+        self.name = self.remove_html_tags(soup.select_one("#products_maintitle").text)

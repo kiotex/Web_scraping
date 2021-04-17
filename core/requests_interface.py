@@ -7,14 +7,14 @@ from bs4 import BeautifulSoup
 
 
 class Request_Interface(metaclass=ABCMeta):
-    # UA偽装用
     my_header = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; NP06; rv:11.0) like Gecko"
     }
 
     def __init__(self, url, notify=True, notify_method=None):
         self.url = url
-        self._last_stock = self.check_stock_method()
+        self.check_stock_method()
+        self._last_stock = self.stock
 
         self.notify = notify
         if notify is True:
@@ -31,7 +31,8 @@ class Request_Interface(metaclass=ABCMeta):
     def check_stock(self):
         """在庫確認のループ
         """
-        self.stock = self.check_stock_method()
+        self.check_stock_method()
+
         if self.stock != self._last_stock and self.stock:
             if self.notify:
                 self.notify_method.send_message(f"在庫復活：{self.url}")
@@ -51,7 +52,7 @@ class Request_Interface(metaclass=ABCMeta):
         """在庫確認用メソッド
 
         Returns:
-            bool:   在庫の有無（在庫あり:True, 在庫なし:False, ERROR: -1）
+            bool:   在庫の有無（在庫あり:True, 在庫なし:False）
             float:  金額
             string: 商品名
         """
@@ -59,4 +60,6 @@ class Request_Interface(metaclass=ABCMeta):
 
         # do something
 
-        return -1, 0.0, "product name"
+        self.stock = False
+        self.cost = 0.0
+        self.name = "product name"
