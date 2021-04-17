@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 from abc import ABCMeta, abstractmethod
 import requests
 from bs4 import BeautifulSoup
+import datetime
 
 
 class Request_Interface(metaclass=ABCMeta):
@@ -13,6 +15,7 @@ class Request_Interface(metaclass=ABCMeta):
 
     def __init__(self, url, notify=True, notify_method=None):
         self.url = url
+        self.time = datetime.datetime.now()
         self.check_stock_method()
         self._last_stock = self.stock
 
@@ -21,7 +24,7 @@ class Request_Interface(metaclass=ABCMeta):
             if notify_method is None:
                 print("ERROR: notify_method is required!")
             self.notify_method = notify_method
-            self.notify_method.send_message(f"{self.url} をアサインしました")
+            self.notify_method.send_message(f"{self.site}\n{self.name}をアサインしました。\n{self.url}")
 
     def get_soup(self):
         data = requests.get(self.url, headers=self.my_header)
@@ -35,7 +38,7 @@ class Request_Interface(metaclass=ABCMeta):
 
         if self.stock != self._last_stock and self.stock:
             if self.notify:
-                self.notify_method.send_message(f"在庫復活：{self.url}")
+                self.notify_method.send_message(f"在庫復活\n{self.site}\n{self.name}\n\n{self.url}")
 
         self._last_stock = self.stock
 
@@ -63,3 +66,4 @@ class Request_Interface(metaclass=ABCMeta):
         self.stock = False
         self.cost = 0.0
         self.name = "product name"
+        self.time = datetime.datetime.now()
