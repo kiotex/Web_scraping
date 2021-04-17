@@ -59,7 +59,7 @@ class Request_Interface(metaclass=ABCMeta):
             float:  金額
             string: 商品名
         """
-        soup = self.get_soup()
+        # soup = self.get_soup()
 
         # do something
 
